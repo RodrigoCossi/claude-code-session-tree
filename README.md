@@ -149,6 +149,11 @@ re-running the mod's way of storing turns; token counts are estimated as charact
 Contributions are welcome. This section is only for people who want to change the code; if you
 just use the mod, you don't need any of it.
 
+**Before you contribute:** by opening a pull request, you agree that RodrigoCossi may use,
+modify and license your contribution under any terms, including the
+[PolyForm Noncommercial license](LICENSE) and separate commercial licenses. You keep the right
+to use your own contribution as you wish.
+
 ### Repository layout
 
 ```
@@ -249,3 +254,14 @@ installed the mod get it with:
 claude plugin update session-tree@claude-code-session-tree
 claude plugin update session-tree-cut@claude-code-session-tree
 ```
+
+## License
+
+[PolyForm Noncommercial 1.0.0](LICENSE). Copyright 2026 RodrigoCossi.
+
+- **Free for noncommercial use:** personal projects, study, research, hobby use, and use by
+  charities, schools, public research and government institutions. You may change the code and
+  share it, as long as you keep the [LICENSE](LICENSE) file and its `Required Notice` line.
+- **Commercial use needs a separate license.** This includes using it in a company's work, in a
+  paid product or service, or selling it. To ask for one, contact
+  [RodrigoCossi on GitHub](https://github.com/RodrigoCossi).
