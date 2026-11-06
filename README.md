@@ -128,9 +128,9 @@ re-running the mod's way of storing turns; token counts are estimated as charact
 ### Correctness
 
 - **Very long turns lose their middle steps.** Each turn is stored as text of at most 30,000
-  characters (about 6% of turns are longer). Over that, the middle of the turn is cut and its start
-  and final answer are always kept, so after a jump Claude still sees what was asked and what was
-  concluded.
+  characters, so that a single huge turn can't flood the context after a jump. Over that limit,
+  the middle of the turn is cut and its start and final answer are always kept, so Claude still
+  sees what was asked and what was concluded.
 - **Turns are found by their prompt text.** To decide where to cut, the companion mod matches each
   turn's prompt against the conversation. Two identical prompts (for example, "continue") can make
   it cut in the wrong place and build the wrong context.
