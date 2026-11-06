@@ -4,19 +4,9 @@ A git-style graph of every turn in a Claude Code session, shown in a pane beside
 Click any earlier turn to jump the conversation back to it. Your next prompt then starts a new
 branch, and the other branches stay in the tree so you can switch back to them later.
 
-```
- ● 1  set up the project
- │
- ● 2  add a login page
- ├─╮
- │ ● 5  [branch 2]  try OAuth instead
- │ │
- │ ● 6  add Google provider
- │
- ● 3  [main]  add password reset
- │
- ● 4  write tests
-```
+<p align="center">
+  <img src="docs/tree.svg" alt="Session Tree pane: main branch in blue, branch 2 in magenta, branch 3 in green, with the current turn marked" width="680">
+</p>
 
 ## Features
 
