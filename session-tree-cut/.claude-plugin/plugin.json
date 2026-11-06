@@ -1,0 +1,1 @@
+{ "name": "session-tree-cut", "version": "0.1.0", "description": "Companion of session-tree: applies a tree jump to the conversation (Claude Code skips a mod's own handler for its own compaction, so this lives in a separate mod)." }
