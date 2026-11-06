@@ -97,13 +97,42 @@ appear and closing one seems not to work.
 
 The pane asks for the widest dock Claude Code allows (45% of the terminal).
 
-## Limitations
+## Known issues and things to watch
 
-- **Rebuilt turns are text**: the turns added back after a jump have their tool calls flattened
-  into text, so detail from tool output can be lost.
-- **Only the conversation changes**: files written and commands run on a deleted or abandoned
-  branch stay done. The raw session transcript also keeps everything.
-- **One tree per session**: turns from before the mod was loaded, or from a session Claude Code
+These come from reading the code. None of them has been measured yet.
+
+### Token and context cost
+
+- **What costs nothing**: the tree itself never enters the model's context, and a jump does not
+  ask the model to summarize anything. After a jump, the context holds only the path to the target
+  turn, so it never grows from keeping several branches.
+- **Every jump breaks the prompt cache.** Claude Code resends the whole conversation on every
+  prompt, and the unchanged start of it is normally served from Anthropic's prompt cache at a
+  fraction of the price. A jump changes everything after the fork point, so the next prompt pays
+  full price for that part. Caching works again from the prompt after. Switching branches often
+  costs more than staying on one.
+- **Tool results come back shortened.** When a branch is rebuilt, each tool call's input is cut to
+  600 characters and each result to 1,500. That makes the rebuilt branch smaller than the original,
+  but if Claude needs a file it read on that branch, it has to read it again, and those extra reads
+  can cost more than was saved.
+
+### Correctness
+
+- **Long turns can lose their final answer.** Each turn is stored as text of at most 30,000
+  characters, and the cut keeps the *start*. In a long turn with many tool calls (roughly 15–20 or
+  more), the part dropped is the end: the final answer. After jumping back to that branch, Claude
+  would see the work but not the conclusion. Possible fix: always keep the final reply and cut from
+  the middle.
+- **Turns are found by their prompt text.** To decide where to cut, the companion mod matches each
+  turn's prompt against the conversation. Two identical prompts (for example, "continue") can make
+  it cut in the wrong place and build the wrong context.
+
+### Scope
+
+- **Only the conversation changes.** Files written and commands run on a deleted or abandoned
+  branch stay done. If Claude reads those files on another branch, it sees their result. The raw
+  session transcript also keeps everything.
+- **One tree per session.** Turns from before the mod was loaded, or from a session Claude Code
   moved to a new session id, are not in the tree.
 - Up to the last 500 turns are kept.
 
