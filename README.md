@@ -64,28 +64,28 @@ The cut lives in a **separate mod** because Claude Code does not run a mod's own
 
 ## Installation
 
-Type these two lines at the Claude Code prompt, one after the other:
+1. In Claude Code, type the first line at the prompt:
 
-```
-/plugin install session-tree --marketplace RodrigoCossi/claude-code-session-tree
-/plugin install session-tree-cut --marketplace RodrigoCossi/claude-code-session-tree
-```
+   ```
+   /plugin install session-tree --marketplace RodrigoCossi/claude-code-session-tree
+   ```
 
-- The first time, Claude Code asks whether to add the marketplace: answer `y`.
-- When asked for a scope, choose **user** (the first option, Enter). The mod then loads in
-  every Claude Code session you start, in any folder.
-- **Both lines are required.** `session-tree` draws the tree; `session-tree-cut` is what actually
-  switches the conversation when you jump. With only the first one, a jump would run a normal
-  summarizing compaction instead (see [How it works](#how-it-works)).
+   The first time, it asks whether to add the marketplace: answer `y`.
+   When it asks for a scope, choose **user** (the first option, then Enter). The mod then loads
+   in every Claude Code session, in any folder.
 
-You'll see a **🌳 Tree** button at the bottom right of the prompt. Click it, or type `/tree`.
+2. Type the second line the same way:
 
-From a shell instead of the prompt:
+   ```
+   /plugin install session-tree-cut --marketplace RodrigoCossi/claude-code-session-tree
+   ```
 
-```sh
-claude plugin install session-tree --marketplace RodrigoCossi/claude-code-session-tree
-claude plugin install session-tree-cut --marketplace RodrigoCossi/claude-code-session-tree
-```
+   **Both lines are required.** `session-tree` draws the tree; `session-tree-cut` is what switches
+   the conversation when you jump. Without it, a jump runs a normal summarizing compaction
+   (see [How it works](#how-it-works)).
+
+3. Check that it loaded: a **🌳 Tree** button appears at the bottom right of the prompt. Click it,
+   or type `/tree`.
 
 **Private repository:** installing works only for GitHub accounts that can read this repository,
 on a machine where git can already authenticate to github.com (for example after
