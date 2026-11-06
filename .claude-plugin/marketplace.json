@@ -1,6 +1,8 @@
 {
   "name": "claude-code-session-tree",
-  "owner": { "name": "RodrigoCossi" },
+  "owner": {
+    "name": "RodrigoCossi"
+  },
   "plugins": [
     {
       "name": "session-tree",
@@ -10,7 +12,7 @@
     {
       "name": "session-tree-cut",
       "source": "./session-tree-cut",
-      "description": "Required companion of session-tree: applies a tree jump to the conversation"
+      "description": "Companion of session-tree, installed automatically with it: applies a tree jump to the conversation"
     }
   ]
 }

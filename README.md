@@ -64,25 +64,20 @@ The cut lives in a **separate mod** because Claude Code does not run a mod's own
 
 ## Installation
 
-1. In Claude Code, type the first line at the prompt:
+1. In Claude Code, type this line at the prompt:
 
    ```
    /plugin install session-tree --marketplace RodrigoCossi/claude-code-session-tree
    ```
 
-   The first time, it asks whether to add the marketplace: answer `y`.
-   When it asks for a scope, choose **user** (the first option, then Enter). The mod then loads
-   in every Claude Code session, in any folder.
+2. Answer the two questions:
+   - **Add marketplace?** Press `y`.
+   - **Where to install:** keep **Install for you (user scope)**, the first option, and press
+     Enter. The mod then loads in every Claude Code session, in any folder.
 
-2. Type the second line the same way:
-
-   ```
-   /plugin install session-tree-cut --marketplace RodrigoCossi/claude-code-session-tree
-   ```
-
-   **Both lines are required.** `session-tree` draws the tree; `session-tree-cut` is what switches
-   the conversation when you jump. Without it, a jump runs a normal summarizing compaction
-   (see [How it works](#how-it-works)).
+   You'll see `Installed session-tree … (+ 1 dependency: session-tree-cut)`: the companion part
+   that switches the conversation on a jump comes along automatically, with the same scope
+   (see [How it works](#how-it-works) for why it is a separate part).
 
 3. Check that it loaded: a **🌳 Tree** button appears at the bottom right of the prompt. Click it,
    or type `/tree`.
