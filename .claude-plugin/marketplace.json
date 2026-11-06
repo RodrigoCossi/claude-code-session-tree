@@ -1,0 +1,16 @@
+{
+  "name": "claude-code-session-tree",
+  "owner": { "name": "RodrigoCossi" },
+  "plugins": [
+    {
+      "name": "session-tree",
+      "source": "./session-tree",
+      "description": "Git-graph pane of every turn and fork in the session; click a turn to jump there and branch from it"
+    },
+    {
+      "name": "session-tree-cut",
+      "source": "./session-tree-cut",
+      "description": "Required companion of session-tree: applies a tree jump to the conversation"
+    }
+  ]
+}
