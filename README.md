@@ -149,25 +149,108 @@ re-running the mod's way of storing turns; token counts are estimated as charact
   moved to a new session id, are not in the tree.
 - Up to the last 500 turns are kept.
 
-## Tests (for contributors)
+## Contributing
 
-Only needed if you change the code; installing the mod doesn't require this.
-From the repository root, run:
+Contributions are welcome. This section is only for people who want to change the code; if you
+just use the mod, you don't need any of it.
+
+### Repository layout
+
+```
+session-tree/                  the pane, the Tree button, /tree and /tree-go; records each turn
+  hooks/register.tsx           all of the mod's code
+  hooks/*.test.tsx             its tests
+  types/index.d.ts             TurnNode and Tree types (the stored tree)
+session-tree-cut/              applies a jump to the conversation
+  hooks/cut.tsx                the cut
+  hooks/cut.test.tsx           its tests
+.claude-plugin/marketplace.json   makes this repository installable with /plugin install
+```
+
+### Trying your changes in Claude Code
+
+1. If you installed the mod with `/plugin install`, turn that copy off first. Otherwise both
+   copies load and you get two Tree panes:
+   ```sh
+   claude plugin disable session-tree@claude-code-session-tree
+   claude plugin disable session-tree-cut@claude-code-session-tree
+   ```
+2. From the root of your clone, start Claude Code with your copy of both mods:
+   ```sh
+   CLAUDE_CODE_PLUGIN_DIRS="$PWD/session-tree:$PWD/session-tree-cut" claude
+   ```
+3. When you're done, turn the installed copy back on with `claude plugin enable` and the same
+   two names.
+
+### Running the tests
+
+The tests check the mod's behavior in a simulated session, in under a second, without you having
+to click through the tree by hand. Run them after every change: if one fails, your change broke
+something that used to work.
+
+From the root of your clone:
 
 ```sh
 claude plugin test session-tree
 claude plugin test session-tree-cut
 ```
 
-They check the graph layout, branching, fork/delete/undo, how each turn is stored, and the jump
-cut, without starting a real session.
-
-## Repository layout
+When everything is fine, each command lists its tests marked `(pass)` and ends with a summary:
 
 ```
-session-tree/          graph pane, Tree button, /tree and /tree-go, records each turn
-  hooks/register.tsx
-  types/index.d.ts     TurnNode and Tree types
-session-tree-cut/      applies a jump to the conversation
-  hooks/cut.tsx
+ 13 pass
+ 0 fail
+Ran 13 tests across 5 files.
+```
+
+for `session-tree`, and `3 pass`, `0 fail` for `session-tree-cut`. A test marked `(fail)` names
+the behavior that broke and shows what was expected and what came out.
+
+What each test file covers:
+
+| File | Checks |
+| --- | --- |
+| `session-tree/hooks/tree.test.tsx` | branches are drawn, each in its own color, with the current turn marked; a turn is recorded from the conversation; the Tree button opens the pane |
+| `session-tree/hooks/links.test.tsx` | dots on the same branch are joined by a line |
+| `session-tree/hooks/switch.test.tsx` | clicking a turn asks for the cut and moves the "you are here" marker |
+| `session-tree/hooks/fork-delete.test.tsx` | Fork here starts a new branch; delete and undo; deleting the branch you're on jumps back first; main can't be deleted |
+| `session-tree/hooks/flatten.test.tsx` | how a turn is stored: tool results up to 6,000 characters kept whole, long turns keep their start and final answer |
+| `session-tree-cut/hooks/cut.test.tsx` | what a jump keeps and rebuilds; similar prompts aren't confused |
+
+If you add a feature or fix a bug, add a test for it in the matching file.
+
+### Sending a change for review
+
+This repository is private, so ask the owner to invite your GitHub account as a collaborator
+first. Then:
+
+1. **Fork** the repository: the **Fork** button at the top right of its GitHub page. This makes
+   your own copy under your account.
+2. **Clone your fork** and create a branch for your change:
+   ```sh
+   git clone https://github.com/<your-account>/claude-code-session-tree.git
+   cd claude-code-session-tree
+   git checkout -b my-change
+   ```
+3. Make the change, try it in Claude Code (above), and run the tests until they all pass.
+   Then raise the `version` in the `.claude-plugin/plugin.json` of each mod you changed
+   (for example `0.1.0` → `0.2.0`): `claude plugin update` uses it to tell that there is
+   something new to install.
+4. **Commit and push** the branch to your fork:
+   ```sh
+   git add -A
+   git commit -m "Short description of the change"
+   git push -u origin my-change
+   ```
+5. **Open a pull request**: on your fork's GitHub page, click **Compare & pull request**, check that
+   the target is `RodrigoCossi/claude-code-session-tree`, branch `main`, then describe what you
+   changed, why, and how you tested it.
+
+The owner reviews the pull request and may ask for changes; push more commits to the same branch
+and they appear in the pull request. Once approved, it's merged into `main`, and people who
+installed the mod get it with:
+
+```sh
+claude plugin update session-tree@claude-code-session-tree
+claude plugin update session-tree-cut@claude-code-session-tree
 ```
