@@ -64,25 +64,36 @@ The cut lives in a **separate mod** because Claude Code does not run a mod's own
 
 ## Installation
 
-Both mods are needed.
+Type these two lines at the Claude Code prompt, one after the other:
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/RodrigoCossi/claude-code-session-tree.git
-   ```
-2. Add both folders to `CLAUDE_CODE_PLUGIN_DIRS` in `~/.claude/settings.json`
-   (separated by `:`):
-   ```json
-   {
-     "env": {
-       "CLAUDE_CODE_PLUGIN_DIRS": "/path/to/claude-code-session-tree/session-tree:/path/to/claude-code-session-tree/session-tree-cut"
-     }
-   }
-   ```
-3. Start a new Claude Code session.
+```
+/plugin install session-tree --marketplace RodrigoCossi/claude-code-session-tree
+/plugin install session-tree-cut --marketplace RodrigoCossi/claude-code-session-tree
+```
 
-Load each mod only once: if the same mod is also loaded from another folder, two Tree panes
-appear and closing one seems not to work.
+- The first time, Claude Code asks whether to add the marketplace: answer `y`.
+- When asked for a scope, choose **user** (the first option, Enter). The mod then loads in
+  every Claude Code session you start, in any folder.
+- **Both lines are required.** `session-tree` draws the tree; `session-tree-cut` is what actually
+  switches the conversation when you jump. With only the first one, a jump would run a normal
+  summarizing compaction instead (see [How it works](#how-it-works)).
+
+You'll see a **🌳 Tree** button at the bottom right of the prompt. Click it, or type `/tree`.
+
+From a shell instead of the prompt:
+
+```sh
+claude plugin install session-tree --marketplace RodrigoCossi/claude-code-session-tree
+claude plugin install session-tree-cut --marketplace RodrigoCossi/claude-code-session-tree
+```
+
+**Private repository:** installing works only for GitHub accounts that can read this repository,
+on a machine where git can already authenticate to github.com (for example after
+`gh auth login` and `gh auth setup-git`). The install does not ask for a password.
+
+**Load it only once:** if you also load these folders another way (for example through
+`CLAUDE_CODE_PLUGIN_DIRS` while developing), two Tree panes appear and closing one seems not
+to work.
 
 ## Usage
 
