@@ -108,9 +108,9 @@ to work.
 
 The pane asks for the widest dock Claude Code allows (45% of the terminal).
 
-## Known issues and things to watch
+## Notes on cost and behavior
 
-These come from reading the code. None of them has been measured yet.
+These notes come from reading the code and have not been measured yet.
 
 ### Token and context cost
 
