@@ -11,7 +11,7 @@ const tree = atom({ plugin: 'session-tree', key: 'tree' } as const, { nodes: [],
 })
 
 const BUILT_CAP = 30_000
-const RESULT_CAP = 1_500
+const RESULT_CAP = 6_000
 
 // Module variables (reset on reload, which is fine: they only live across one call).
 // Prompts sent but not yet recorded, oldest first. One typed while a turn runs fires its submit at
@@ -47,7 +47,16 @@ function findPrompt(msgs: readonly SessionMessage[], prompt: string, from: numbe
   return -1
 }
 
-function flatten(rows: readonly SessionMessage[]): { built: string; reply: string } {
+const MIDDLE_CUT = '\n\n[… middle of this turn cut …]\n\n'
+const clipMiddle = (s: string, n: number) => {
+  if (s.length <= n) return s
+  const room = n - MIDDLE_CUT.length
+  if (room < 2) return MIDDLE_CUT.trim()
+  return s.slice(0, Math.ceil(room / 2)) + MIDDLE_CUT + s.slice(s.length - Math.floor(room / 2))
+}
+
+// Over BUILT_CAP, the middle of the turn is cut and the final answer always kept.
+export function flatten(rows: readonly SessionMessage[]): { built: string; reply: string } {
   const parts: string[] = []
   let reply = ''
   for (const m of rows) {
@@ -62,7 +71,17 @@ function flatten(rows: readonly SessionMessage[]): { built: string; reply: strin
       parts.push(`[tool ${t.tool} ${input}${t.isError ? ' → ERROR' : ' →'} ${res}]`)
     }
   }
-  return { built: clip(parts.join('\n\n'), BUILT_CAP), reply: clip(oneLine(reply), 300) }
+  const endsWithReply = reply !== '' && parts[parts.length - 1] === reply
+  let built: string
+  if (endsWithReply && parts.length > 1) {
+    const final = clipMiddle(reply, BUILT_CAP)
+    const room = BUILT_CAP - final.length - 2
+    const before = parts.slice(0, -1).join('\n\n')
+    built = room >= before.length ? `${before}\n\n${final}` : `${clipMiddle(before, Math.max(0, room))}\n\n${final}`
+  } else {
+    built = clipMiddle(parts.join('\n\n'), BUILT_CAP)
+  }
+  return { built, reply: clip(oneLine(reply), 300) }
 }
 
 // ── git-graph layout, oldest first: the first turn at the top ───────────────────
