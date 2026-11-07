@@ -190,11 +190,13 @@ something that used to work.
 From the root of your clone:
 
 ```sh
-claude plugin test session-tree
-claude plugin test session-tree-cut
+claude plugin test session-tree && claude plugin test session-tree-cut
 ```
 
-When everything is fine, each command lists its tests marked `(pass)` and ends with a summary:
+This runs the tests of both mods, one after the other. If the first mod's tests fail, the second
+mod's tests are not run: fix the failure and run the line again.
+
+When everything is fine, each mod lists its tests marked `(pass)` and ends with a summary:
 
 ```
  13 pass
@@ -250,9 +252,11 @@ and they appear in the pull request. Once approved, it's merged into `main`, and
 installed the mod get it with:
 
 ```sh
-claude plugin update session-tree@claude-code-session-tree
-claude plugin update session-tree-cut@claude-code-session-tree
+claude plugin update session-tree@claude-code-session-tree && claude plugin update session-tree-cut@claude-code-session-tree
 ```
+
+This updates both mods: updating `session-tree` alone does not update `session-tree-cut`. Restart
+Claude Code afterwards to use the new version.
 
 ## License
 
