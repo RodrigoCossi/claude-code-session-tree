@@ -17,7 +17,7 @@ branch, and the other branches stay in the tree so you can switch back to them l
 
 ## Features
 
-- **Graph pane**: every turn as a dot, labelled with its prompt and a preview of the reply.
+- **Graph pane**: every turn as a dot, labelled with its prompt.
   Branches get tags such as `[main]` and `[branch 2]`. The first turn is at the top.
 - **Jump**: click a turn, or use `/tree-go N`, and Claude sees only the conversation up to that
   turn on that branch.
@@ -200,24 +200,23 @@ session-tree-cut/              applies a jump to the conversation
 .claude-plugin/marketplace.json   makes this repository installable with /plugin install
 ```
 
-### Trying your changes in Claude Code
+### Trying your changes in ### Trying your changes in Claude Code
 
-1. If you installed the mod with `/plugin install`, turn that copy off first. Otherwise both
-   copies load and you get two Tree panes:
-   ```sh
-   claude plugin disable session-tree@claude-code-session-tree
-   claude plugin disable session-tree-cut@claude-code-session-tree
-   ```
-2. From the root of your clone, start Claude Code with your copy of both mods:
-   ```sh
-   CLAUDE_CODE_PLUGIN_DIRS="$PWD/session-tree:$PWD/session-tree-cut" claude
-   ```
-3. When you're done, turn the installed copy back on with `claude plugin enable` and the same
-   two names.
+Make your changes in your clone (see [Sending a change for review](#sending-a-change-for-review)),
+not in the copy installed with `/plugin install`. An update replaces the installed files, so edits
+made there are lost, and they can't be sent as a pull request.
 
-### Running the tests
+To try your changes, start Claude Code from your clone's folder with:
 
-The tests check the mod's behavior in a simulated session, in under a second, without you having
+```sh
+claude --plugin-dir .
+```
+
+That session uses the mods from your clone instead of the installed ones. You don't need to
+uninstall or turn anything off, and other sessions keep using the installed copy. Restart it after
+each change.
+
+tests check the mod's behavior in a simulated session, in under a second, without you having
 to click through the tree by hand. Run them after every change: if one fails, your change broke
 something that used to work.
 
@@ -290,7 +289,8 @@ claude plugin update session-tree@claude-code-session-tree && claude plugin upda
 ```
 
 This updates both mods: updating `session-tree` alone does not update `session-tree-cut`. Restart
-Claude Code afterwards to use the new version.
+Claude Code afterwards to use the new version. If an error appears, run the line again, and
+restart Claude Code only when both are updated.
 
 ## License
 
