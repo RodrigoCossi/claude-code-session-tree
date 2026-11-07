@@ -89,10 +89,6 @@ The cut lives in a **separate mod** because Claude Code does not run a mod's own
 3. Check that it loaded: a **🌳 Tree** button appears at the bottom right of the prompt. Click it,
    or type `/tree`.
 
-**Private repository:** installing works only for GitHub accounts that can read this repository,
-on a machine where git can already authenticate to github.com (for example after
-`gh auth login` and `gh auth setup-git`). The install does not ask for a password.
-
 **Load it only once:** if you also load these folders another way (for example through
 `CLAUDE_CODE_PLUGIN_DIRS` while developing), two Tree panes appear and closing one seems not
 to work.
@@ -177,17 +173,61 @@ re-running the mod's way of storing turns; token counts are estimated as charact
   moved to a new session id, are not in the tree.
 - Up to the last 500 turns are kept.
 
+## Updating
+
+When a new version is out, type this line in a terminal:
+
+```sh
+claude plugin update session-tree@claude-code-session-tree && claude plugin update session-tree-cut@claude-code-session-tree
+```
+
+It updates both parts of the mod. Then restart Claude Code. If an error appears, run the line
+again, and restart only when both parts are updated.
+
 ## Contributing
 
-Contributions are welcome. This section is only for people who want to change the code; if you
-just use the mod, you don't need any of it.
-
-**Before you contribute:** by opening a pull request, you agree that RodrigoCossi may use,
+Anyone can propose a change. By opening a pull request, you agree that RodrigoCossi may use,
 modify and license your contribution under any terms, including the
 [PolyForm Noncommercial license](LICENSE) and separate commercial licenses. You keep the right
 to use your own contribution as you wish.
 
-### Repository layout
+### Step by step
+
+1. **Fork** this repository with the **Fork** button at the top right of this page. It makes
+   your own copy on GitHub.
+2. **Download your copy** and create a branch for your change:
+   ```sh
+   git clone https://github.com/<your-account>/claude-code-session-tree.git
+   cd claude-code-session-tree
+   git checkout -b my-change
+   ```
+3. **Make your change** in this folder, yourself or by asking Claude Code. Don't edit the copy
+   installed with `/plugin install`: an update overwrites it.
+4. **Try it.** From this folder, start Claude Code with:
+   ```sh
+   claude --plugin-dir .
+   ```
+   This Claude Code window uses your version of the mod instead of the installed one. Other
+   windows are not affected. After each change, quit and run the line again.
+5. **Run the tests** from this folder:
+   ```sh
+   claude plugin test session-tree && claude plugin test session-tree-cut
+   ```
+   Everything is fine when both end with `0 fail` (13 tests for `session-tree`, 3 for
+   `session-tree-cut`). A failed test says what broke.
+6. **Raise the version** in `.claude-plugin/plugin.json` of each part you changed, for example
+   `0.2.2` → `0.2.3`. Without this, people who installed the mod don't get your change when they
+   update.
+7. **Send it:**
+   ```sh
+   git add -A
+   git commit -m "Short description of the change"
+   git push -u origin my-change
+   ```
+   Then on your fork's GitHub page click **Compare & pull request**, and describe what you
+   changed, why, and how you tested it.
+
+### Where the code is
 
 ```
 session-tree/                  the pane, the Tree button, /tree and /tree-go; records each turn
@@ -200,47 +240,7 @@ session-tree-cut/              applies a jump to the conversation
 .claude-plugin/marketplace.json   makes this repository installable with /plugin install
 ```
 
-### Trying your changes in ### Trying your changes in Claude Code
-
-Make your changes in your clone (see [Sending a change for review](#sending-a-change-for-review)),
-not in the copy installed with `/plugin install`. An update replaces the installed files, so edits
-made there are lost, and they can't be sent as a pull request.
-
-To try your changes, start Claude Code from your clone's folder with:
-
-```sh
-claude --plugin-dir .
-```
-
-That session uses the mods from your clone instead of the installed ones. You don't need to
-uninstall or turn anything off, and other sessions keep using the installed copy. Restart it after
-each change.
-
-tests check the mod's behavior in a simulated session, in under a second, without you having
-to click through the tree by hand. Run them after every change: if one fails, your change broke
-something that used to work.
-
-From the root of your clone:
-
-```sh
-claude plugin test session-tree && claude plugin test session-tree-cut
-```
-
-This runs the tests of both mods, one after the other. If the first mod's tests fail, the second
-mod's tests are not run: fix the failure and run the line again.
-
-When everything is fine, each mod lists its tests marked `(pass)` and ends with a summary:
-
-```
- 13 pass
- 0 fail
-Ran 13 tests across 5 files.
-```
-
-for `session-tree`, and `3 pass`, `0 fail` for `session-tree-cut`. A test marked `(fail)` names
-the behavior that broke and shows what was expected and what came out.
-
-What each test file covers:
+### What the tests check
 
 | File | Checks |
 | --- | --- |
@@ -251,46 +251,7 @@ What each test file covers:
 | `session-tree/hooks/flatten.test.tsx` | how a turn is stored: tool results up to 6,000 characters kept whole, long turns keep their start and final answer |
 | `session-tree-cut/hooks/cut.test.tsx` | what a jump keeps and rebuilds; similar prompts aren't confused |
 
-If you add a feature or fix a bug, add a test for it in the matching file.
-
-### Sending a change for review
-
-This repository is private, so ask the owner to invite your GitHub account as a collaborator
-first. Then:
-
-1. **Fork** the repository: the **Fork** button at the top right of its GitHub page. This makes
-   your own copy under your account.
-2. **Clone your fork** and create a branch for your change:
-   ```sh
-   git clone https://github.com/<your-account>/claude-code-session-tree.git
-   cd claude-code-session-tree
-   git checkout -b my-change
-   ```
-3. Make the change, try it in Claude Code (above), and run the tests until they all pass.
-   Then raise the `version` in the `.claude-plugin/plugin.json` of each mod you changed
-   (for example `0.1.0` → `0.2.0`): `claude plugin update` uses it to tell that there is
-   something new to install.
-4. **Commit and push** the branch to your fork:
-   ```sh
-   git add -A
-   git commit -m "Short description of the change"
-   git push -u origin my-change
-   ```
-5. **Open a pull request**: on your fork's GitHub page, click **Compare & pull request**, check that
-   the target is `RodrigoCossi/claude-code-session-tree`, branch `main`, then describe what you
-   changed, why, and how you tested it.
-
-The owner reviews the pull request and may ask for changes; push more commits to the same branch
-and they appear in the pull request. Once approved, it's merged into `main`, and people who
-installed the mod get it with:
-
-```sh
-claude plugin update session-tree@claude-code-session-tree && claude plugin update session-tree-cut@claude-code-session-tree
-```
-
-This updates both mods: updating `session-tree` alone does not update `session-tree-cut`. Restart
-Claude Code afterwards to use the new version. If an error appears, run the line again, and
-restart Claude Code only when both are updated.
+If you add a feature or fix a bug, add a test for it.
 
 ## License
 
