@@ -119,8 +119,7 @@ re-running the mod's way of storing turns; token counts are estimated as charact
   full price for that part. Caching works again from the prompt after. Switching branches often
   costs more than staying on one.
 - **Long tool results come back shortened.** When a branch is rebuilt, each tool call's input is
-  cut to 600 characters and each result to 6,000. About 5% of tool results are longer than that.
-  If Claude needs the full content of a file it read on that branch, it reads it again.
+  cut to 600 characters and each result to 6,000. If Claude needs the full content of a file it read on that branch, it reads it again.
 - **Size of a rebuilt branch.** On average a stored turn is about 5,500 characters, so rebuilding
   a 10-turn branch adds roughly 14,000 tokens to the next prompt. A typical short turn is about
   260 tokens.
