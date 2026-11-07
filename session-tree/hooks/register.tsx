@@ -1,3 +1,8 @@
+// Copyright 2026 RodrigoCossi (https://github.com/RodrigoCossi)
+// Part of Session Tree for Claude Code: https://github.com/RodrigoCossi/claude-code-session-tree
+// Licensed under the PolyForm Noncommercial License 1.0.0 (see LICENSE). Commercial use needs a
+// separate license. Keep this notice in every copy or modified version.
+
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, SessionMessage } from 'claude-code'
 
