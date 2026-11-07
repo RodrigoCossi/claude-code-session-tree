@@ -103,6 +103,33 @@ to work.
 
 The pane asks for the widest dock Claude Code allows (45% of the terminal).
 
+## How this differs from Claude Code's fork agent
+
+Claude Code can also "fork": Claude can start a `fork` agent (the Agent tool with
+`subagent_type: "fork"`). The two do different jobs.
+
+**Claude Code's fork agent**
+- Claude starts a copy of itself that has the whole conversation so far, on the same model.
+- It runs **in the background, in parallel**. You keep talking to the main session while it works.
+- You don't see it work and can't steer it; only the main session can message it. When it finishes,
+  only its **final report** comes back into the main context. Its tool output stays out, which keeps
+  that context small.
+- It works on the same files, unless it is given its own git worktree. Its changes are real.
+- Good for side jobs: "research or build X while we keep working on Y."
+
+**Session Tree's branches**
+- They branch **the same single conversation**. Only one branch is live at a time.
+- It runs **one branch at a time, and you drive it**: you jump back to a turn and continue from there.
+  Claude then forgets the other branch, because the jump cuts and rebuilds its context. The other
+  branches stay in the graph so you can switch back.
+- Nothing runs in parallel, and nothing reports back. Switching branches is how you move between them.
+- Good for "what if I'd asked differently?", undoing a wrong turn, or exploring alternatives by hand.
+
+**In short:** the fork agent is a parallel worker whose result is merged into the main conversation
+as a summary. Session Tree is a time machine for one conversation: you go back and take a different
+path, and nothing merges back. In both cases, files changed and commands run on any branch, or by
+any fork, stay changed. Neither one undoes real work.
+
 ## Notes on cost and behavior
 
 The numbers below were measured on 255 real sessions (1,541 turns, 6,356 tool results) by
