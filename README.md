@@ -89,10 +89,6 @@ The cut lives in a **separate mod** because Claude Code does not run a mod's own
 3. Check that it loaded: a **🌳 Tree** button appears at the bottom right of the prompt. Click it,
    or type `/tree`.
 
-**Load it only once:** if you also load these folders another way (for example through
-`CLAUDE_CODE_PLUGIN_DIRS` while developing), two Tree panes appear and closing one seems not
-to work.
-
 ## Usage
 
 | Action | How |
