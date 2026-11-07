@@ -1,5 +1,12 @@
 # 🌳 Session Tree for Claude Code
 
+A Claude Code conversation is a single line. When it goes the wrong way, say a bad
+approach, a misread request or a long detour, everything after it stays in Claude's context and
+keeps steering the answers. Your choices are to argue it back on track, start a new session and
+lose the useful context, or rewind and leave the other path behind with no map back to it. Session
+Tree lets you try alternatives the way you would in git: go back to any turn, branch from there,
+and keep every path you tried one click away, while Claude sees only the branch you're on.
+
 A git-style graph of every turn in a Claude Code session, shown in a pane beside the chat.
 Click any earlier turn to jump the conversation back to it. Your next prompt then starts a new
 branch, and the other branches stay in the tree so you can switch back to them later.
